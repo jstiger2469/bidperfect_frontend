@@ -234,7 +234,40 @@ export function ComplianceIntakeStep({ onContinue, savedData }: ComplianceIntake
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (validateDocuments()) {
-      saveImmediate({ documents: uploadedDocs as ComplianceDocument[] })
+      // Transform documents to match backend schema
+      const transformedDocs = uploadedDocs.map(doc => {
+        // Remove UI-only properties
+        const { tempId, isCollapsed, ...docWithoutUIProps } = doc
+        
+        // Map frontend types to backend discriminator types
+        let backendType: 'certificate' | 'insurance' | 'bonding' | 'attachment'
+        switch (doc.type) {
+          case 'insurance':
+            backendType = 'insurance'
+            break
+          case 'certificate':
+            backendType = 'certificate'
+            break
+          case 'bonding':
+            backendType = 'bonding'
+            break
+          case 'w9':
+          case 'ein_letter':
+          case 'license':
+          case 'other':
+          default:
+            backendType = 'attachment'
+            break
+        }
+        
+        return {
+          ...docWithoutUIProps,
+          type: backendType,
+        }
+      })
+      
+      console.log('[ComplianceIntakeStep] Transformed documents for backend:', transformedDocs)
+      saveImmediate({ documents: transformedDocs as ComplianceDocument[] })
     }
   }
 
