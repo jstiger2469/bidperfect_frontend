@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { IntegrationsSchema } from '@/lib/onboarding-types'
 import { useStepSaver } from '@/lib/useOnboarding'
+import { useOnboardingStore } from '@/lib/stores/onboardingStore'
 import type { z } from 'zod'
 
 type FormData = z.infer<typeof IntegrationsSchema>
@@ -51,15 +52,40 @@ const INTEGRATIONS = [
   },
 ]
 
-export function IntegrationsStep({ onContinue }: { onContinue: () => void }) {
-  const { watch, setValue, handleSubmit, formState: { isValid } } = useForm<FormData>({
-    resolver: zodResolver(IntegrationsSchema),
-    defaultValues: {
+interface IntegrationsStepProps {
+  onContinue: () => void
+  savedData?: FormData
+}
+
+export function IntegrationsStep({ onContinue, savedData }: IntegrationsStepProps) {
+  // Get Zustand cache for persistence across navigation
+  const cachedData = useOnboardingStore((state) => state.stepData?.INTEGRATIONS as FormData | undefined)
+  const setStepData = useOnboardingStore((state) => state.setState)
+  
+  // Priority: Zustand cache > backend savedData > empty defaults
+  const initialData: FormData = React.useMemo(() => {
+    const defaultValues = {
       drive: { enabled: false },
       email: { enabled: false },
       eSign: { enabled: false },
       accounting: { enabled: false },
-    },
+    }
+    
+    if (cachedData) {
+      console.log('[IntegrationsStep] Loading from Zustand cache:', cachedData)
+      return cachedData
+    }
+    if (savedData) {
+      console.log('[IntegrationsStep] Loading from backend savedData:', savedData)
+      return savedData
+    }
+    console.log('[IntegrationsStep] Using empty defaults')
+    return defaultValues
+  }, [cachedData, savedData])
+
+  const { watch, setValue, handleSubmit, formState: { isValid } } = useForm<FormData>({
+    resolver: zodResolver(IntegrationsSchema),
+    defaultValues: initialData,
     mode: 'onChange',
   })
 
@@ -82,6 +108,51 @@ export function IntegrationsStep({ onContinue }: { onContinue: () => void }) {
     const current = currentData[id as keyof FormData]
     setValue(id as any, { ...current, enabled: !current?.enabled })
   }
+
+  // =====================
+  // ZUSTAND PERSISTENCE
+  // =====================
+  // Auto-save to Zustand for navigation back persistence
+  const hasInitializedRef = React.useRef(false)
+  const lastSavedDataRef = React.useRef<string>('')
+  const saveTimeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined)
+
+  React.useEffect(() => {
+    // Skip on initial mount (prevents saving empty data on page load)
+    if (!hasInitializedRef.current) {
+      hasInitializedRef.current = true
+      return
+    }
+
+    // Deep equality check - only save if data truly changed
+    const currentDataJson = JSON.stringify(currentData)
+    if (currentDataJson === lastSavedDataRef.current) {
+      console.log('[IntegrationsStep] Data unchanged, skipping Zustand save')
+      return
+    }
+
+    // Debounce: wait 2s after last change before saving to Zustand
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current)
+    }
+
+    saveTimeoutRef.current = setTimeout(() => {
+      console.log('[IntegrationsStep] 💾 Saving to Zustand:', currentData)
+      setStepData({
+        stepData: {
+          ...useOnboardingStore.getState().stepData,
+          INTEGRATIONS: currentData,
+        },
+      })
+      lastSavedDataRef.current = currentDataJson
+    }, 2000) // 2-second debounce
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current)
+      }
+    }
+  }, [currentData, setStepData])
 
   return (
     <div className="space-y-6">

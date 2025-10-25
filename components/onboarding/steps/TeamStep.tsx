@@ -11,14 +11,38 @@ import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { TeamSchema } from '@/lib/onboarding-types'
 import { useStepSaver } from '@/lib/useOnboarding'
+import { useOnboardingStore } from '@/lib/stores/onboardingStore'
 import type { z } from 'zod'
 
 type FormData = z.infer<typeof TeamSchema>
 
-export function TeamStep({ onContinue }: { onContinue: () => void }) {
+interface TeamStepProps {
+  onContinue: () => void
+  savedData?: FormData
+}
+
+export function TeamStep({ onContinue, savedData }: TeamStepProps) {
+  // Get Zustand cache for persistence across navigation
+  const cachedData = useOnboardingStore((state) => state.stepData?.TEAM as FormData | undefined)
+  const setStepData = useOnboardingStore((state) => state.setState)
+  
+  // Priority: Zustand cache > backend savedData > empty defaults
+  const initialData: FormData = React.useMemo(() => {
+    if (cachedData?.invites && cachedData.invites.length > 0) {
+      console.log('[TeamStep] Loading from Zustand cache:', cachedData)
+      return cachedData
+    }
+    if (savedData?.invites && savedData.invites.length > 0) {
+      console.log('[TeamStep] Loading from backend savedData:', savedData)
+      return savedData
+    }
+    console.log('[TeamStep] Using empty defaults')
+    return { invites: [] }
+  }, [cachedData, savedData])
+
   const { register, control, handleSubmit, watch, formState: { errors, isValid } } = useForm<FormData>({
     resolver: zodResolver(TeamSchema),
-    defaultValues: { invites: [] },
+    defaultValues: initialData,
     mode: 'onChange',
   })
 
@@ -36,6 +60,51 @@ export function TeamStep({ onContinue }: { onContinue: () => void }) {
 
   // Simple no-op function for backward compatibility
   const clearPendingChanges = () => {}
+
+  // =====================
+  // ZUSTAND PERSISTENCE
+  // =====================
+  // Auto-save to Zustand for navigation back persistence
+  const hasInitializedRef = React.useRef(false)
+  const lastSavedDataRef = React.useRef<string>('')
+  const saveTimeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined)
+
+  React.useEffect(() => {
+    // Skip on initial mount (prevents saving empty data on page load)
+    if (!hasInitializedRef.current) {
+      hasInitializedRef.current = true
+      return
+    }
+
+    // Deep equality check - only save if data truly changed
+    const currentDataJson = JSON.stringify(currentData)
+    if (currentDataJson === lastSavedDataRef.current) {
+      console.log('[TeamStep] Data unchanged, skipping Zustand save')
+      return
+    }
+
+    // Debounce: wait 2s after last change before saving to Zustand
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current)
+    }
+
+    saveTimeoutRef.current = setTimeout(() => {
+      console.log('[TeamStep] 💾 Saving to Zustand:', currentData)
+      setStepData({
+        stepData: {
+          ...useOnboardingStore.getState().stepData,
+          TEAM: currentData,
+        },
+      })
+      lastSavedDataRef.current = currentDataJson
+    }, 2000) // 2-second debounce
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current)
+      }
+    }
+  }, [currentData, setStepData])
 
   return (
     <div className="space-y-6">

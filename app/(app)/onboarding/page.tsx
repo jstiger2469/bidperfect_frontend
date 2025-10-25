@@ -121,11 +121,11 @@ export default function OnboardingPage() {
       case 'COMPLIANCE_INTAKE':
         return <ComplianceIntakeStep savedData={stepData['COMPLIANCE_INTAKE']} {...stepProps} />
       case 'INTEGRATIONS':
-        return <IntegrationsStep {...stepProps} />
+        return <IntegrationsStep savedData={stepData['INTEGRATIONS']} {...stepProps} />
       case 'TEAM':
-        return <TeamStep {...stepProps} />
+        return <TeamStep savedData={stepData['TEAM']} {...stepProps} />
       case 'FIRST_RFP':
-        return <FirstRfpStep {...stepProps} />
+        return <FirstRfpStep savedData={stepData['FIRST_RFP']} {...stepProps} />
       case 'DONE':
         return <DoneStep />
       default:

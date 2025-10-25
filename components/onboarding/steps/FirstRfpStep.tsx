@@ -9,15 +9,39 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { FirstRfpSchema } from '@/lib/onboarding-types'
 import { useStepSaver } from '@/lib/useOnboarding'
+import { useOnboardingStore } from '@/lib/stores/onboardingStore'
 import FileUploadZone from '@/components/FileUploadZone'
 import type { z } from 'zod'
 
 type FormData = z.infer<typeof FirstRfpSchema>
 
-export function FirstRfpStep({ onContinue }: { onContinue: () => void }) {
+interface FirstRfpStepProps {
+  onContinue: () => void
+  savedData?: FormData
+}
+
+export function FirstRfpStep({ onContinue, savedData }: FirstRfpStepProps) {
+  // Get Zustand cache for persistence across navigation
+  const cachedData = useOnboardingStore((state) => state.stepData?.FIRST_RFP as FormData | undefined)
+  const setStepData = useOnboardingStore((state) => state.setState)
+  
+  // Priority: Zustand cache > backend savedData > empty defaults
+  const initialData: FormData = React.useMemo(() => {
+    if (cachedData) {
+      console.log('[FirstRfpStep] Loading from Zustand cache:', cachedData)
+      return cachedData
+    }
+    if (savedData) {
+      console.log('[FirstRfpStep] Loading from backend savedData:', savedData)
+      return savedData
+    }
+    console.log('[FirstRfpStep] Using empty defaults')
+    return { mode: 'skip' }
+  }, [cachedData, savedData])
+
   const { watch, setValue, handleSubmit, formState: { isValid } } = useForm<FormData>({
     resolver: zodResolver(FirstRfpSchema),
-    defaultValues: { mode: 'skip' },
+    defaultValues: initialData,
     mode: 'onChange',
   })
 
@@ -34,6 +58,51 @@ export function FirstRfpStep({ onContinue }: { onContinue: () => void }) {
 
   // Simple no-op function for backward compatibility
   const clearPendingChanges = () => {}
+
+  // =====================
+  // ZUSTAND PERSISTENCE
+  // =====================
+  // Auto-save to Zustand for navigation back persistence
+  const hasInitializedRef = React.useRef(false)
+  const lastSavedDataRef = React.useRef<string>('')
+  const saveTimeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined)
+
+  React.useEffect(() => {
+    // Skip on initial mount (prevents saving empty data on page load)
+    if (!hasInitializedRef.current) {
+      hasInitializedRef.current = true
+      return
+    }
+
+    // Deep equality check - only save if data truly changed
+    const currentDataJson = JSON.stringify(currentData)
+    if (currentDataJson === lastSavedDataRef.current) {
+      console.log('[FirstRfpStep] Data unchanged, skipping Zustand save')
+      return
+    }
+
+    // Debounce: wait 2s after last change before saving to Zustand
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current)
+    }
+
+    saveTimeoutRef.current = setTimeout(() => {
+      console.log('[FirstRfpStep] 💾 Saving to Zustand:', currentData)
+      setStepData({
+        stepData: {
+          ...useOnboardingStore.getState().stepData,
+          FIRST_RFP: currentData,
+        },
+      })
+      lastSavedDataRef.current = currentDataJson
+    }, 2000) // 2-second debounce
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current)
+      }
+    }
+  }, [currentData, setStepData])
 
   return (
     <div className="space-y-6">
