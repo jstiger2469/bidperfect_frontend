@@ -42,7 +42,10 @@ export function InsuranceMetadataForm({
     field: K,
     value: InsuranceMetadata[K]
   ) => {
-    onChange({ ...data, [field]: value })
+    console.log(`[InsuranceMetadataForm] 📝 Field updated:`, { field, value, previousData: data })
+    const newData = { ...data, [field]: value }
+    console.log(`[InsuranceMetadataForm] 📤 Calling onChange with:`, newData)
+    onChange(newData)
   }
 
   return (
@@ -325,7 +328,10 @@ export function TaxDocumentMetadataForm({
     field: K,
     value: TaxDocumentMetadata[K]
   ) => {
-    onChange({ ...data, [field]: value })
+    console.log(`[TaxDocumentMetadataForm] 📝 Field updated:`, { field, value, previousData: data })
+    const newData = { ...data, [field]: value }
+    console.log(`[TaxDocumentMetadataForm] 📤 Calling onChange with:`, newData)
+    onChange(newData)
   }
 
   return (
@@ -493,7 +499,10 @@ export function BondingMetadataForm({
     field: K,
     value: BondingMetadata[K]
   ) => {
-    onChange({ ...data, [field]: value })
+    console.log(`[BondingMetadataForm] 📝 Field updated:`, { field, value, previousData: data })
+    const newData = { ...data, [field]: value }
+    console.log(`[BondingMetadataForm] 📤 Calling onChange with:`, newData)
+    onChange(newData)
   }
 
   const updateBondTypes = (type: string, checked: boolean) => {
