@@ -205,29 +205,78 @@ export function ComplianceIntakeStep({ onContinue, savedData }: ComplianceIntake
     }
   }, [uploadedDocs, store])
 
-  // Validate all documents
+  // Detailed validation with user-friendly error messages
   const validateDocuments = () => {
-    try {
-      ComplianceIntakeSchema.parse({ documents: uploadedDocs })
-      setValidationErrors({})
-      return true
-    } catch (error: any) {
-      if (error.errors) {
-        const errors: Record<string, any> = {}
-        error.errors.forEach((err: any) => {
-          const path = err.path.join('.')
-          errors[path] = err.message
-        })
-        setValidationErrors(errors)
+    const errors: string[] = []
+    
+    // Check for required document types
+    const hasW9 = uploadedDocs.some(d => d.type === 'w9')
+    const hasInsurance = uploadedDocs.some(d => d.type === 'insurance')
+    const hasBonding = uploadedDocs.some(d => d.type === 'bonding')
+    
+    if (!hasW9) {
+      errors.push('📄 W-9 Form is required')
+    }
+    if (!hasInsurance) {
+      errors.push('🛡️ Insurance Policies are required')
+    }
+    if (!hasBonding) {
+      errors.push('📜 Bonding Capacity Letter is required')
+    }
+    
+    // Check each document for complete metadata
+    uploadedDocs.forEach(doc => {
+      const docName = doc.name || 'Unnamed document'
+      const isComplete = isDocumentComplete(doc)
+      
+      if (!isComplete) {
+        const missingFields: string[] = []
+        
+        switch (doc.type) {
+          case 'insurance':
+            if (!doc.metadata?.policyNumber?.trim()) missingFields.push('Policy Number')
+            if (!doc.metadata?.carrier?.trim()) missingFields.push('Insurance Carrier')
+            if (!doc.metadata?.effectiveDate?.trim()) missingFields.push('Effective Date')
+            if (!doc.metadata?.expirationDate?.trim()) missingFields.push('Expiration Date')
+            break
+          case 'certificate':
+            if (!doc.metadata?.certificateNumber?.trim()) missingFields.push('Certificate Number')
+            if (!doc.metadata?.issuingAuthority?.trim()) missingFields.push('Issuing Authority')
+            if (!doc.metadata?.issueDate?.trim()) missingFields.push('Issue Date')
+            break
+          case 'w9':
+          case 'ein_letter':
+            if (!doc.metadata?.ein?.trim()) missingFields.push('EIN')
+            if (!doc.metadata?.legalName?.trim()) missingFields.push('Legal Name')
+            break
+          case 'bonding':
+            if (!doc.metadata?.suretyName?.trim()) missingFields.push('Surety Company Name')
+            if (!doc.metadata?.singleProjectLimit) missingFields.push('Single Project Limit')
+            if (!doc.metadata?.aggregateLimit) missingFields.push('Aggregate Limit')
+            if (!doc.metadata?.expirationDate?.trim()) missingFields.push('Expiration Date')
+            break
+        }
+        
+        if (missingFields.length > 0) {
+          errors.push(`📋 "${docName}" is missing: ${missingFields.join(', ')}`)
+        }
       }
+    })
+    
+    if (errors.length > 0) {
+      setValidationErrors({ general: errors })
       return false
     }
+    
+    setValidationErrors({})
+    return true
   }
 
   // Check if required docs are present with complete metadata
   const hasRequiredDocs = 
-    uploadedDocs.some(d => d.type === 'w9' && d.metadata) && 
-    uploadedDocs.some(d => d.type === 'insurance' && d.metadata)
+    uploadedDocs.some(d => d.type === 'w9' && isDocumentComplete(d)) && 
+    uploadedDocs.some(d => d.type === 'insurance' && isDocumentComplete(d)) &&
+    uploadedDocs.some(d => d.type === 'bonding' && isDocumentComplete(d))
 
   const canContinue = hasRequiredDocs && Object.keys(validationErrors).length === 0
 
@@ -570,11 +619,16 @@ export function ComplianceIntakeStep({ onContinue, savedData }: ComplianceIntake
         </p>
       </div>
 
-      {Object.keys(validationErrors).length > 0 && (
+      {validationErrors.general && validationErrors.general.length > 0 && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Please complete all required metadata fields before continuing.
+            <div className="font-semibold mb-2">Please complete the following before continuing:</div>
+            <ul className="space-y-1 ml-4">
+              {validationErrors.general.map((error: string, index: number) => (
+                <li key={index} className="text-sm">{error}</li>
+              ))}
+            </ul>
           </AlertDescription>
         </Alert>
       )}
