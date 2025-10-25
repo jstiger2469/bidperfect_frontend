@@ -148,7 +148,12 @@ export function IntegrationsStep({ onContinue }: { onContinue: () => void }) {
         })}
 
         <div className="flex items-center justify-between pt-4 border-t">
-          <Button type="button" variant="ghost" onClick={onContinue}>
+          <Button 
+            type="button" 
+            variant="ghost" 
+            onClick={() => saveImmediate(currentData)}
+            disabled={isSaving}
+          >
             Skip for now
           </Button>
           <Button type="submit" disabled={isSaving}>

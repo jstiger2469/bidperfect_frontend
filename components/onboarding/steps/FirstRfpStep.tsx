@@ -108,7 +108,14 @@ export function FirstRfpStep({ onContinue }: { onContinue: () => void }) {
         )}
 
         <div className="flex justify-between pt-4 border-t">
-          <Button type="button" variant="ghost" onClick={onContinue}>Skip for now</Button>
+          <Button 
+            type="button" 
+            variant="ghost" 
+            onClick={() => saveImmediate(currentData)}
+            disabled={isSaving}
+          >
+            Skip for now
+          </Button>
           <Button type="submit" disabled={isSaving}>
             {isSaving ? 'Processing...' : 'Continue'}
           </Button>
