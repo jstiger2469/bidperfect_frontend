@@ -388,13 +388,20 @@ export function ComplianceIntakeStep({ onContinue, savedData }: ComplianceIntake
           console.log(`[ComplianceIntakeStep] ✨ Cleaned metadata:`, cleanedMetadata)
         }
         
+        // CRITICAL: Always include metadata if it exists in the original doc
+        // Don't set to undefined, as backend expects an object (even if empty for some fields)
+        const finalMetadata = Object.keys(cleanedMetadata).length > 0 
+          ? cleanedMetadata 
+          : (doc.metadata ? doc.metadata : undefined)
+        
         const transformed = {
           ...docWithoutUIProps,
           type: backendType,
-          metadata: Object.keys(cleanedMetadata).length > 0 ? cleanedMetadata : undefined,
+          metadata: finalMetadata,
         }
         
         console.log(`[ComplianceIntakeStep] ✅ Transformed doc:`, transformed)
+        console.log(`[ComplianceIntakeStep] 📋 Final metadata for ${doc.name}:`, finalMetadata)
         return transformed
       })
       
