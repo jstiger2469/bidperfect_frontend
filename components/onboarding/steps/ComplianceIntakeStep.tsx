@@ -260,13 +260,31 @@ export function ComplianceIntakeStep({ onContinue, savedData }: ComplianceIntake
             break
         }
         
+        // Clean metadata - remove empty strings and convert to undefined
+        const cleanedMetadata: Record<string, any> = {}
+        if (doc.metadata) {
+          for (const key in doc.metadata) {
+            const value = (doc.metadata as any)[key]
+            // Keep the value if it's not an empty string or whitespace
+            if (typeof value === 'string') {
+              if (value.trim() !== '') {
+                cleanedMetadata[key] = value.trim()
+              }
+            } else if (value !== null && value !== undefined) {
+              // Keep non-string values (numbers, booleans, arrays, objects)
+              cleanedMetadata[key] = value
+            }
+          }
+        }
+        
         return {
           ...docWithoutUIProps,
           type: backendType,
+          metadata: Object.keys(cleanedMetadata).length > 0 ? cleanedMetadata : undefined,
         }
       })
       
-      console.log('[ComplianceIntakeStep] Transformed documents for backend:', transformedDocs)
+      console.log('[ComplianceIntakeStep] Transformed documents for backend:', JSON.stringify(transformedDocs, null, 2))
       saveImmediate({ documents: transformedDocs as ComplianceDocument[] })
     }
   }
