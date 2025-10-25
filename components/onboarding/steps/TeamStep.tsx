@@ -29,14 +29,21 @@ export function TeamStep({ onContinue, savedData }: TeamStepProps) {
   // Priority: Zustand cache > backend savedData > empty defaults
   const initialData: FormData = React.useMemo(() => {
     if (cachedData?.invites && cachedData.invites.length > 0) {
-      console.log('[TeamStep] Loading from Zustand cache:', cachedData)
+      console.log('[TeamStep] 📦 Loading from Zustand cache:', cachedData)
+      // DIAGNOSTIC: Check role format in cached data
+      cachedData.invites.forEach((invite, idx) => {
+        console.log(`  [${idx}] Cached role: "${invite.role}"`)
+        if (invite.role !== 'org:admin' && invite.role !== 'org:member') {
+          console.warn(`  [${idx}] ⚠️ Cached data has OLD role format: "${invite.role}"`)
+        }
+      })
       return cachedData
     }
     if (savedData?.invites && savedData.invites.length > 0) {
-      console.log('[TeamStep] Loading from backend savedData:', savedData)
+      console.log('[TeamStep] 🔙 Loading from backend savedData:', savedData)
       return savedData
     }
-    console.log('[TeamStep] Using empty defaults')
+    console.log('[TeamStep] 🆕 Using empty defaults')
     return { invites: [] }
   }, [cachedData, savedData])
 
@@ -60,6 +67,24 @@ export function TeamStep({ onContinue, savedData }: TeamStepProps) {
 
   // Simple no-op function for backward compatibility
   const clearPendingChanges = () => {}
+
+  // DIAGNOSTIC: Log actual payload before sending to backend
+  const onSubmit = (data: FormData) => {
+    console.log('[TeamStep] 🚀 Submitting team invites:', data)
+    console.log('[TeamStep] 📋 Role validation check:')
+    data.invites.forEach((invite, idx) => {
+      console.log(`  [${idx}] email: ${invite.email}, role: "${invite.role}" (type: ${typeof invite.role})`)
+      
+      // Verify role format
+      if (invite.role !== 'org:admin' && invite.role !== 'org:member') {
+        console.error(`[TeamStep] ❌ INVALID ROLE FORMAT: "${invite.role}" - Expected "org:admin" or "org:member"`)
+      } else {
+        console.log(`  [${idx}] ✅ Role format valid: "${invite.role}"`)
+      }
+    })
+    
+    saveImmediate(data)
+  }
 
   // =====================
   // ZUSTAND PERSISTENCE
@@ -119,7 +144,7 @@ export function TeamStep({ onContinue, savedData }: TeamStepProps) {
         <Badge variant="secondary" className="mt-2">Optional</Badge>
       </div>
 
-      <form onSubmit={handleSubmit((data) => saveImmediate(data))} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <Card>
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
