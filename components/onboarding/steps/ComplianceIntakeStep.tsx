@@ -498,12 +498,20 @@ export function ComplianceIntakeStep({ onContinue, savedData }: ComplianceIntake
   }
 
   const updateDocMetadata = (identifier: string, metadata: any) => {
-    setUploadedDocs(prev => prev.map(doc => {
-      if ((doc.tempId || doc.fileId) === identifier) {
-        return { ...doc, metadata }
-      }
-      return doc
-    }))
+    console.log(`[ComplianceIntakeStep] 📥 updateDocMetadata called:`, { identifier, metadata })
+    
+    setUploadedDocs(prev => {
+      const updated = prev.map(doc => {
+        if ((doc.tempId || doc.fileId) === identifier) {
+          console.log(`[ComplianceIntakeStep] ✅ Updating doc:`, { doc, newMetadata: metadata })
+          return { ...doc, metadata }
+        }
+        return doc
+      })
+      
+      console.log(`[ComplianceIntakeStep] 📦 Updated uploadedDocs:`, updated)
+      return updated
+    })
   }
 
   const updateDocSubType = (identifier: string, subType: string) => {
