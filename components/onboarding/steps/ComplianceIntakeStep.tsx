@@ -227,6 +227,7 @@ export function ComplianceIntakeStep({ onContinue, savedData }: ComplianceIntake
       case 'w9':
       case 'ein_letter':
         return !!(
+          doc.metadata.documentDate &&
           doc.metadata.ein &&
           doc.metadata.legalName
         )
@@ -287,6 +288,7 @@ export function ComplianceIntakeStep({ onContinue, savedData }: ComplianceIntake
             break
           case 'w9':
           case 'ein_letter':
+            if (!doc.metadata?.documentDate?.trim()) missingFields.push('Document Date')
             if (!doc.metadata?.ein?.trim()) missingFields.push('EIN')
             if (!doc.metadata?.legalName?.trim()) missingFields.push('Legal Name')
             break
