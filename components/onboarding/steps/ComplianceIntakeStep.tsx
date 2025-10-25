@@ -323,9 +323,18 @@ export function ComplianceIntakeStep({ onContinue, savedData }: ComplianceIntake
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    console.log('[ComplianceIntakeStep] 🚀 Form submitted!')
+    console.log('[ComplianceIntakeStep] Raw uploadedDocs:', JSON.stringify(uploadedDocs, null, 2))
+    
     if (validateDocuments()) {
       // Transform documents to match backend schema
       const transformedDocs = uploadedDocs.map(doc => {
+        console.log(`[ComplianceIntakeStep] 📄 Processing doc: ${doc.name}`, {
+          type: doc.type,
+          metadata: doc.metadata,
+        })
+        
         // Remove UI-only properties
         const { tempId, isCollapsed, ...docWithoutUIProps } = doc
         
@@ -353,29 +362,47 @@ export function ComplianceIntakeStep({ onContinue, savedData }: ComplianceIntake
         // Clean metadata - remove empty strings and convert to undefined
         const cleanedMetadata: Record<string, any> = {}
         if (doc.metadata) {
+          console.log(`[ComplianceIntakeStep] 🧹 Cleaning metadata for ${doc.name}:`, doc.metadata)
+          
           for (const key in doc.metadata) {
             const value = (doc.metadata as any)[key]
+            console.log(`  - Field "${key}": ${typeof value} = ${JSON.stringify(value)}`)
+            
             // Keep the value if it's not an empty string or whitespace
             if (typeof value === 'string') {
               if (value.trim() !== '') {
                 cleanedMetadata[key] = value.trim()
+                console.log(`    ✅ Kept: "${value.trim()}"`)
+              } else {
+                console.log(`    ❌ Removed (empty string)`)
               }
             } else if (value !== null && value !== undefined) {
               // Keep non-string values (numbers, booleans, arrays, objects)
               cleanedMetadata[key] = value
+              console.log(`    ✅ Kept (non-string): ${JSON.stringify(value)}`)
+            } else {
+              console.log(`    ❌ Removed (null/undefined)`)
             }
           }
+          
+          console.log(`[ComplianceIntakeStep] ✨ Cleaned metadata:`, cleanedMetadata)
         }
         
-        return {
+        const transformed = {
           ...docWithoutUIProps,
           type: backendType,
           metadata: Object.keys(cleanedMetadata).length > 0 ? cleanedMetadata : undefined,
         }
+        
+        console.log(`[ComplianceIntakeStep] ✅ Transformed doc:`, transformed)
+        return transformed
       })
       
-      console.log('[ComplianceIntakeStep] Transformed documents for backend:', JSON.stringify(transformedDocs, null, 2))
+      console.log('[ComplianceIntakeStep] 📦 FINAL PAYLOAD TO BACKEND:', JSON.stringify(transformedDocs, null, 2))
+      console.log('[ComplianceIntakeStep] 📤 Calling saveImmediate...')
       saveImmediate({ documents: transformedDocs as ComplianceDocument[] })
+    } else {
+      console.log('[ComplianceIntakeStep] ❌ Validation failed, not submitting')
     }
   }
 
