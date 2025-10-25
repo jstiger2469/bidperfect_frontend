@@ -311,7 +311,7 @@ export const IntegrationsSchema = z.object({
 export const TeamSchema = z.object({
   invites: z.array(z.object({
     email: z.string().email(),
-    role: z.enum(['admin', 'member', 'viewer']),
+    role: z.enum(['org:admin', 'org:member']),
     firstName: z.string().optional(),
     lastName: z.string().optional(),
   })),
