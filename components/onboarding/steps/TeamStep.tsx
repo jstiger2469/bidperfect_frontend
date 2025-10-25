@@ -3,7 +3,7 @@
 import React from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Users, Plus, X, Mail, UserPlus } from 'lucide-react'
+import { Users, Plus, X, Mail, UserPlus, CheckCircle2 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge'
 import { TeamSchema } from '@/lib/onboarding-types'
 import { useStepSaver } from '@/lib/useOnboarding'
 import { useOnboardingStore } from '@/lib/stores/onboardingStore'
+import { toast } from 'sonner'
 import type { z } from 'zod'
 
 type FormData = z.infer<typeof TeamSchema>
@@ -59,7 +60,25 @@ export function TeamStep({ onContinue, savedData }: TeamStepProps) {
     step: 'TEAM',
     onSuccess: (response) => {
       clearPendingChanges()
+      
+      // Show success message for invites
+      const inviteCount = currentData.invites?.length || 0
+      if (inviteCount > 0) {
+        toast.success('Invitations sent!', {
+          description: `${inviteCount} team ${inviteCount === 1 ? 'member' : 'members'} invited. They'll receive an email with instructions.`,
+          duration: 4000,
+          icon: <CheckCircle2 className="w-5 h-5" />,
+        })
+      }
+      
       if (response.nextStep) onContinue()
+    },
+    onError: (error) => {
+      // Show error message if invite sending fails
+      toast.error('Failed to send invitations', {
+        description: error.message || 'Please try again or skip this step for now.',
+        duration: 5000,
+      })
     },
   })
 
