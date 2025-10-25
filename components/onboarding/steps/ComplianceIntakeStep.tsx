@@ -205,6 +205,47 @@ export function ComplianceIntakeStep({ onContinue, savedData }: ComplianceIntake
     }
   }, [uploadedDocs, store])
 
+  // Check if document metadata is complete
+  const isDocumentComplete = (doc: DocumentWithTempId): boolean => {
+    if (!doc.metadata) return false
+    
+    // Check based on document type
+    switch (doc.type) {
+      case 'insurance':
+        return !!(
+          doc.metadata.policyNumber &&
+          doc.metadata.carrier &&
+          doc.metadata.effectiveDate &&
+          doc.metadata.expirationDate
+        )
+      case 'certificate':
+        return !!(
+          doc.metadata.certificateNumber &&
+          doc.metadata.issuingAuthority &&
+          doc.metadata.issueDate
+        )
+      case 'w9':
+      case 'ein_letter':
+        return !!(
+          doc.metadata.ein &&
+          doc.metadata.legalName
+        )
+      case 'bonding':
+        return !!(
+          doc.metadata.suretyName &&
+          doc.metadata.singleProjectLimit &&
+          doc.metadata.aggregateLimit &&
+          doc.metadata.expirationDate
+        )
+      case 'license':
+      case 'other':
+        // These have optional metadata
+        return true
+      default:
+        return false
+    }
+  }
+
   // Detailed validation with user-friendly error messages
   const validateDocuments = () => {
     const errors: string[] = []
@@ -448,47 +489,6 @@ export function ComplianceIntakeStep({ onContinue, savedData }: ComplianceIntake
       }
       return doc
     }))
-  }
-  
-  // Check if document metadata is complete
-  const isDocumentComplete = (doc: DocumentWithTempId): boolean => {
-    if (!doc.metadata) return false
-    
-    // Check based on document type
-    switch (doc.type) {
-      case 'insurance':
-        return !!(
-          doc.metadata.policyNumber &&
-          doc.metadata.carrier &&
-          doc.metadata.effectiveDate &&
-          doc.metadata.expirationDate
-        )
-      case 'certificate':
-        return !!(
-          doc.metadata.certificateNumber &&
-          doc.metadata.issuingAuthority &&
-          doc.metadata.issueDate
-        )
-      case 'w9':
-      case 'ein_letter':
-        return !!(
-          doc.metadata.ein &&
-          doc.metadata.legalName
-        )
-      case 'bonding':
-        return !!(
-          doc.metadata.suretyName &&
-          doc.metadata.singleProjectLimit &&
-          doc.metadata.aggregateLimit &&
-          doc.metadata.expirationDate
-        )
-      case 'license':
-      case 'other':
-        // These have optional metadata
-        return true
-      default:
-        return false
-    }
   }
   
   // Render collapsed document summary
