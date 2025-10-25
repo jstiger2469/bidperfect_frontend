@@ -65,9 +65,8 @@ export function TeamStep({ onContinue }: { onContinue: () => void }) {
                 <div className="flex-1 space-y-2">
                   <Input {...register(`invites.${index}.email`)} placeholder="Email" />
                   <select {...register(`invites.${index}.role`)} className="w-full px-3 py-2 border rounded-md">
-                    <option value="member">Member</option>
-                    <option value="admin">Admin</option>
-                    <option value="viewer">Viewer</option>
+                    <option value="org:member">Member</option>
+                    <option value="org:admin">Admin</option>
                   </select>
                 </div>
                 <Button type="button" variant="ghost" size="sm" onClick={() => remove(index)}>
@@ -75,7 +74,7 @@ export function TeamStep({ onContinue }: { onContinue: () => void }) {
                 </Button>
               </div>
             ))}
-            <Button type="button" variant="outline" onClick={() => append({ email: '', role: 'member' })}>
+            <Button type="button" variant="outline" onClick={() => append({ email: '', role: 'org:member' })}>
               <Plus className="w-4 h-4 mr-2" /> Add Team Member
             </Button>
           </CardContent>
