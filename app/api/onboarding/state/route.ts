@@ -126,11 +126,16 @@ export async function GET() {
     // Frontend expects: { state: { currentStep, completedSteps, requiredSteps, progress }, user: { ... } }
     
     const completedSteps = (backendData.completedSteps || []) as OnboardingStep[]
+    // All onboarding steps (blocking + optional)
+    // Users can skip optional steps (INTEGRATIONS, TEAM, FIRST_RFP) but must complete blocking steps
     const requiredSteps: OnboardingStep[] = [
       'ACCOUNT_VERIFIED',
       'ORG_CHOICE',
       'COMPANY_PROFILE',
       'COMPLIANCE_INTAKE',
+      'INTEGRATIONS',  // Optional - can skip
+      'TEAM',          // Optional - can skip
+      'FIRST_RFP',     // Optional - can skip
     ]
     
     // Calculate the CORRECT next step based on what's actually been completed

@@ -146,7 +146,16 @@ export async function POST(request: NextRequest) {
       console.warn('[API /onboarding/complete] ⚠️ Backend returned success but no state object:', data)
       
       // Calculate correct next step based on frontend's required step order
-      const requiredSteps: OnboardingStep[] = ['ACCOUNT_VERIFIED', 'ORG_CHOICE', 'COMPANY_PROFILE', 'COMPLIANCE_INTAKE']
+      // All onboarding steps (blocking + optional)
+      const requiredSteps: OnboardingStep[] = [
+        'ACCOUNT_VERIFIED',
+        'ORG_CHOICE',
+        'COMPANY_PROFILE',
+        'COMPLIANCE_INTAKE',
+        'INTEGRATIONS',  // Optional - can skip
+        'TEAM',          // Optional - can skip
+        'FIRST_RFP',     // Optional - can skip
+      ]
       const currentStepIndex = requiredSteps.indexOf(step)
       const nextStep = currentStepIndex >= 0 && currentStepIndex < requiredSteps.length - 1
         ? requiredSteps[currentStepIndex + 1]

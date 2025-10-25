@@ -48,7 +48,16 @@ const CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutes
 const initialState = {
   currentStep: null,
   completedSteps: [],
-  requiredSteps: ['ACCOUNT_VERIFIED', 'ORG_CHOICE', 'COMPANY_PROFILE', 'COMPLIANCE_INTAKE'] as OnboardingStep[],
+  // All onboarding steps (blocking + optional)
+  requiredSteps: [
+    'ACCOUNT_VERIFIED',
+    'ORG_CHOICE',
+    'COMPANY_PROFILE',
+    'COMPLIANCE_INTAKE',
+    'INTEGRATIONS',  // Optional - can skip
+    'TEAM',          // Optional - can skip
+    'FIRST_RFP',     // Optional - can skip
+  ] as OnboardingStep[],
   progress: 0,
   stepData: {},
   user: null,
