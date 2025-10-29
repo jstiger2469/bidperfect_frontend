@@ -308,7 +308,7 @@ export default function BidPerfectHome() {
       <section id="how" className="py-16 bg-slate-50 border-y">
         <div className="mx-auto max-w-7xl px-4">
           <div className="max-w-2xl">
-            <Badge variant="outline"><Workflow className="h-3.5 w-3.5 mr-1"/> Methodology</Badge>
+            <Badge variant="outline"><Network className="h-3.5 w-3.5 mr-1"/> Methodology</Badge>
             <h2 className="text-3xl md:text-5xl font-semibold tracking-tight mt-3">A proven, enterprise sales flow—clear, intuitive, complete.</h2>
             <p className="mt-3 text-slate-600">We follow a classic conversion narrative: identify pain → quantify impact → demonstrate solution → prove value → invite action.</p>
           </div>
