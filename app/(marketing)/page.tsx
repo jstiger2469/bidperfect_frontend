@@ -100,7 +100,14 @@ const methodology = [
   },
 ];
 
-const badges = ['SAM Registered', 'LaGov Ready', 'QuickBooks Ready', 'Clerk SSO', 'FAR‑Aligned', 'SOC 2 (in progress)'];
+const badges = [
+  { icon: <CheckCircle2 className="h-4 w-4"/>, text: 'SAM Registered', gradient: 'from-blue-500 to-indigo-600' },
+  { icon: <Shield className="h-4 w-4"/>, text: 'LaGov Ready', gradient: 'from-purple-500 to-pink-600' },
+  { icon: <Calculator className="h-4 w-4"/>, text: 'QuickBooks Ready', gradient: 'from-emerald-500 to-teal-600' },
+  { icon: <Lock className="h-4 w-4"/>, text: 'Clerk SSO', gradient: 'from-orange-500 to-red-600' },
+  { icon: <FileCheck2 className="h-4 w-4"/>, text: 'FAR‑Aligned', gradient: 'from-cyan-500 to-blue-600' },
+  { icon: <Sparkles className="h-4 w-4"/>, text: 'SOC 2 (in progress)', gradient: 'from-violet-500 to-purple-600' },
+];
 
 function KPI({value, label}:{value:string; label:string}){
   return (
@@ -268,11 +275,31 @@ export default function BidPerfectHome() {
                 </Button>
               </a>
             </div>
-            <div className="mt-10 grid grid-cols-3 md:grid-cols-6 gap-3 items-center">
-              {badges.map(b => (
-                <div key={b} className="h-12 rounded-lg border border-slate-200 bg-white grid place-content-center text-xs text-slate-600 font-medium shadow-sm hover:shadow-md transition-shadow">
-                  {b}
-                </div>
+            <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 items-center">
+              {badges.map((badge, idx) => (
+                <motion.div
+                  key={badge.text}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.7 + idx * 0.1 }}
+                  whileHover={{ y: -2, scale: 1.02 }}
+                  className="group"
+                >
+                  <div className="h-14 rounded-xl border border-white/40 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all flex items-center gap-2 px-3 relative overflow-hidden">
+                    {/* Gradient background on hover */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${badge.gradient} opacity-0 group-hover:opacity-10 transition-opacity`} />
+                    
+                    {/* Icon with gradient */}
+                    <div className={`relative p-1.5 rounded-lg bg-gradient-to-br ${badge.gradient} text-white shadow-md flex-shrink-0`}>
+                      {badge.icon}
+                    </div>
+                    
+                    {/* Text */}
+                    <span className="relative text-xs font-semibold text-slate-700 leading-tight">
+                      {badge.text}
+                    </span>
+                  </div>
+                </motion.div>
               ))}
             </div>
           </motion.div>
