@@ -3,9 +3,10 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { 
-  CheckCircle2, ArrowRight, Building2, FileText, Users, Shield, BarChart3, Sparkles, Workflow,
-  Rocket, Timer, ClipboardList, Lock, DollarSign, PlugZap, GaugeCircle, Boxes, BookOpenText,
-  FileSignature, Calculator, MessageSquare, GitBranch, Mail, Folder, Cloud
+  CheckCircle2, ArrowRight, Building2, FileText, Users, Shield, BarChart3, Sparkles, Network,
+  Rocket, Timer, ListChecks, Lock, DollarSign, PlugZap, GaugeCircle, Package, BookOpen,
+  FileSignature, Calculator, MessageSquare, GitPullRequest, Mail, Folder, Cloud, Target,
+  Zap, UserCheck, TrendingUp
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,42 +17,48 @@ import Link from "next/link";
 
 const features = [
   {
-    icon: <Workflow className="h-5 w-5"/>,
+    icon: <Network className="h-5 w-5"/>,
+    gradient: "from-blue-500 to-indigo-600",
     title: "Unified RFP Workspace",
     desc: "One command center for the entire lifecycle—capture, parse, collaborate, redline, submit, and audit in one place.",
   },
   {
     icon: <Sparkles className="h-5 w-5"/>,
+    gradient: "from-purple-500 to-pink-600",
     title: "AI-Powered Intelligence",
     desc: "Agent-driven parsing, gap analysis, proposal drafting, and scoring suggestions aligned to evaluation criteria.",
   },
   {
-    icon: <ClipboardList className="h-5 w-5"/>,
+    icon: <ListChecks className="h-5 w-5"/>,
+    gradient: "from-emerald-500 to-teal-600",
     title: "Compliance Matrix",
     desc: "Notion-style matrix with clause mapping, evidence links, and real‑time readiness scoring (FAR-aligned).",
   },
   {
-    icon: <Users className="h-5 w-5"/>,
+    icon: <UserCheck className="h-5 w-5"/>,
+    gradient: "from-orange-500 to-red-600",
     title: "Subcontractor Portal",
     desc: "Invite subs, collect certs & pricing, track readiness, and consolidate quotes with built‑in approval workflows.",
   },
   {
-    icon: <BarChart3 className="h-5 w-5"/>,
+    icon: <TrendingUp className="h-5 w-5"/>,
+    gradient: "from-cyan-500 to-blue-600",
     title: "Pricing & Cost Modeling",
     desc: "G&A/Overhead, fee guidance, wage determinations, CLIN mapping, and margin intelligence—export to PDF/DOCX.",
   },
   {
     icon: <FileSignature className="h-5 w-5"/>,
+    gradient: "from-violet-500 to-purple-600",
     title: "Post‑Award Contract Admin",
     desc: "Mods, deliverables, GFP logs, invoice builder, CPARS prep, closeout checklists—all tightly integrated.",
   },
 ];
 
 const pillars = [
-  { icon: <Timer className="h-5 w-5"/>, title: "Speed", desc: "Days to hours—automate parsing, drafting, routing, and approvals." },
-  { icon: <Shield className="h-5 w-5"/>, title: "Compliance", desc: "Stay aligned to clauses and instructions; fix risks before submission." },
-  { icon: <GaugeCircle className="h-5 w-5"/>, title: "Accuracy", desc: "Structured data + agent checks increase win probability and quality." },
-  { icon: <Users className="h-5 w-5"/>, title: "Collaboration", desc: "One hub for primes, subs, SMEs, and reviewers with audit trails." },
+  { icon: <Zap className="h-5 w-5"/>, gradient: "from-yellow-500 to-orange-600", title: "Speed", desc: "Days to hours—automate parsing, drafting, routing, and approvals." },
+  { icon: <Shield className="h-5 w-5"/>, gradient: "from-green-500 to-emerald-600", title: "Compliance", desc: "Stay aligned to clauses and instructions; fix risks before submission." },
+  { icon: <Target className="h-5 w-5"/>, gradient: "from-blue-500 to-cyan-600", title: "Accuracy", desc: "Structured data + agent checks increase win probability and quality." },
+  { icon: <Users className="h-5 w-5"/>, gradient: "from-indigo-500 to-purple-600", title: "Collaboration", desc: "One hub for primes, subs, SMEs, and reviewers with audit trails." },
 ];
 
 const methodology = [
@@ -60,30 +67,35 @@ const methodology = [
     title: "Capture & Parse",
     copy: "Upload RFPs, amendments, and attachments. Agents extract scope, instructions, evaluation factors, and compliance requirements into structured objects.",
     icon: <FileText className="h-5 w-5"/>,
+    gradient: "from-blue-500 to-indigo-600",
   },
   {
     step: "02",
     title: "Assess & Plan",
     copy: "Gap analysis flags missing certifications, staff, and documents; generate a pursuit plan with tasks, owners, and due dates.",
-    icon: <ClipboardList className="h-5 w-5"/>,
+    icon: <ListChecks className="h-5 w-5"/>,
+    gradient: "from-purple-500 to-pink-600",
   },
   {
     step: "03",
     title: "Assemble & Price",
     copy: "Subcontractor onboarding, scope confirmation, CLIN mapping, wage determinations, and cost modeling with margin guidance.",
-    icon: <Boxes className="h-5 w-5"/>,
+    icon: <Package className="h-5 w-5"/>,
+    gradient: "from-emerald-500 to-teal-600",
   },
   {
     step: "04",
     title: "Draft & Review",
     copy: "AI proposal builder crafts tailored content; reviewers redline in context while the compliance matrix stays in sync.",
-    icon: <BookOpenText className="h-5 w-5"/>,
+    icon: <BookOpen className="h-5 w-5"/>,
+    gradient: "from-orange-500 to-red-600",
   },
   {
     step: "05",
     title: "Submit & Manage",
     copy: "Export to agency formats and track post‑award performance: mods, deliverables, invoices, and CPARS—end to end.",
-    icon: <GitBranch className="h-5 w-5"/>,
+    icon: <GitPullRequest className="h-5 w-5"/>,
+    gradient: "from-cyan-500 to-blue-600",
   },
 ];
 
@@ -226,16 +238,29 @@ export default function BidPerfectHome() {
       <section className="py-10 md:py-14 border-t">
         <div className="mx-auto max-w-7xl px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {pillars.map(p => (
-              <Card key={p.title} className="border border-white/40 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50">
-                <CardContent className="p-5">
-                  <div className="flex items-center gap-2 text-slate-700">
-                    <div className="p-2 rounded-lg bg-white border">{p.icon}</div>
-                    <div className="font-medium">{p.title}</div>
-                  </div>
-                  <p className="text-sm text-slate-600 mt-2">{p.desc}</p>
-                </CardContent>
-              </Card>
+            {pillars.map((p, idx) => (
+              <motion.div
+                key={p.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="border border-white/40 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 hover:shadow-lg transition-shadow">
+                  <CardContent className="p-5">
+                    <div className="flex items-center gap-2 text-slate-700">
+                      <motion.div
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        className={`p-2 rounded-lg bg-gradient-to-br ${p.gradient} text-white shadow-md`}
+                      >
+                        {p.icon}
+                      </motion.div>
+                      <div className="font-medium">{p.title}</div>
+                    </div>
+                    <p className="text-sm text-slate-600 mt-2">{p.desc}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -250,16 +275,30 @@ export default function BidPerfectHome() {
             <p className="mt-3 text-slate-600">A unified system for teams that can’t afford guesswork—centralize requirements, automate drafting, and keep compliance airtight.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 mt-10">
-            {features.map(f => (
-              <Card key={f.title} className="hover:shadow-lg transition border-slate-200 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50">
-                <CardHeader>
-                  <div className="flex items-center gap-2 text-slate-700">
-                    <div className="p-2 rounded-lg bg-slate-50 border">{f.icon}</div>
-                    <CardTitle className="text-lg">{f.title}</CardTitle>
-                  </div>
-                  <CardDescription className="pt-2">{f.desc}</CardDescription>
-                </CardHeader>
-              </Card>
+            {features.map((f, idx) => (
+              <motion.div
+                key={f.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -4 }}
+              >
+                <Card className="hover:shadow-xl transition-all border-slate-200 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 h-full">
+                  <CardHeader>
+                    <div className="flex items-center gap-3 text-slate-700">
+                      <motion.div
+                        whileHover={{ scale: 1.15, rotate: 10 }}
+                        className={`p-2.5 rounded-xl bg-gradient-to-br ${f.gradient} text-white shadow-lg`}
+                      >
+                        {f.icon}
+                      </motion.div>
+                      <CardTitle className="text-lg">{f.title}</CardTitle>
+                    </div>
+                    <CardDescription className="pt-2">{f.desc}</CardDescription>
+                  </CardHeader>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -274,15 +313,28 @@ export default function BidPerfectHome() {
             <p className="mt-3 text-slate-600">We follow a classic conversion narrative: identify pain → quantify impact → demonstrate solution → prove value → invite action.</p>
           </div>
           <div className="grid md:grid-cols-5 gap-4 mt-8">
-            {methodology.map(m => (
-              <div key={m.title} className="p-5 rounded-2xl bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40 h-full">
+            {methodology.map((m, idx) => (
+              <motion.div
+                key={m.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -4, scale: 1.02 }}
+                className="p-5 rounded-2xl bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40 h-full hover:shadow-lg transition-shadow"
+              >
                 <div className="flex items-center justify-between">
                   <div className="text-xs font-mono text-slate-500">{m.step}</div>
-                  <div className="p-2 rounded-lg bg-slate-50 border">{m.icon}</div>
+                  <motion.div
+                    whileHover={{ scale: 1.15, rotate: 10 }}
+                    className={`p-2 rounded-lg bg-gradient-to-br ${m.gradient} text-white shadow-md`}
+                  >
+                    {m.icon}
+                  </motion.div>
                 </div>
                 <div className="mt-3 font-medium">{m.title}</div>
                 <p className="mt-2 text-sm text-slate-600">{m.copy}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
           <div className="mt-10 grid md:grid-cols-3 gap-6">
