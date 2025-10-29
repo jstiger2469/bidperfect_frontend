@@ -859,8 +859,8 @@ export default function BidPerfectHome() {
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-white text-slate-900 border-0 shadow-2xl hover:shadow-3xl transition-all h-full">
-                <CardContent className="p-8">
+              <Card className="bg-white text-slate-900 border-0 shadow-2xl hover:shadow-3xl transition-all h-full flex flex-col">
+                <CardContent className="p-8 flex flex-col flex-grow">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg">
                       <Calendar className="h-6 w-6" />
@@ -870,17 +870,17 @@ export default function BidPerfectHome() {
                       <p className="text-sm text-slate-600">For teams & enterprises</p>
                     </div>
                   </div>
-                  <p className="text-slate-600 mb-6 leading-relaxed">
-                    Get a personalized walkthrough with our team. We'll show you how BidPerfect fits your workflow and answer technical questions.
+                  <p className="text-slate-600 mb-6 leading-relaxed min-h-[48px]">
+                    Get a personalized walkthrough with our team. We'll show you how BidPerfect fits your workflow.
                   </p>
-                  <ul className="space-y-3 mb-6">
+                  <ul className="space-y-3 mb-6 flex-grow">
                     <li className="flex items-start gap-2 text-sm">
                       <CheckCircle2 className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
                       <span>30-minute guided demo</span>
                     </li>
                     <li className="flex items-start gap-2 text-sm">
                       <CheckCircle2 className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                      <span>Custom ROI analysis for your team</span>
+                      <span>Custom ROI analysis</span>
                     </li>
                     <li className="flex items-start gap-2 text-sm">
                       <CheckCircle2 className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
@@ -891,15 +891,17 @@ export default function BidPerfectHome() {
                       <span>Volume pricing discussion</span>
                     </li>
                   </ul>
-                  <a href="https://calendly.com/bidperfect/demo" target="_blank" rel="noopener noreferrer" className="block w-full">
-                    <Button size="lg" className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all text-base font-semibold">
-                      <Calendar className="mr-2 h-5 w-5" />
-                      Schedule Demo
-                    </Button>
-                  </a>
-                  <p className="text-xs text-slate-500 text-center mt-3">
-                    Available Mon-Fri, 9 AM - 6 PM ET
-                  </p>
+                  <div className="mt-auto">
+                    <a href="https://calendly.com/bidperfect/demo" target="_blank" rel="noopener noreferrer" className="block w-full">
+                      <Button size="lg" className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all text-base font-semibold">
+                        <Calendar className="mr-2 h-5 w-5" />
+                        Schedule Demo
+                      </Button>
+                    </a>
+                    <p className="text-xs text-slate-500 text-center mt-3">
+                      Available Mon-Fri, 9 AM - 6 PM ET
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
@@ -911,8 +913,8 @@ export default function BidPerfectHome() {
               transition={{ duration: 0.5, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-white text-slate-900 border-0 shadow-2xl hover:shadow-3xl transition-all h-full">
-                <CardContent className="p-8">
+              <Card className="bg-white text-slate-900 border-0 shadow-2xl hover:shadow-3xl transition-all h-full flex flex-col">
+                <CardContent className="p-8 flex flex-col flex-grow">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg">
                       <Rocket className="h-6 w-6" />
@@ -922,10 +924,10 @@ export default function BidPerfectHome() {
                       <p className="text-sm text-slate-600">Get started instantly</p>
                     </div>
                   </div>
-                  <p className="text-slate-600 mb-6 leading-relaxed">
+                  <p className="text-slate-600 mb-6 leading-relaxed min-h-[48px]">
                     Jump in and explore BidPerfect yourself. Full access to all features, no commitment required.
                   </p>
-                  <ul className="space-y-3 mb-6">
+                  <ul className="space-y-3 mb-6 flex-grow">
                     <li className="flex items-start gap-2 text-sm">
                       <CheckCircle2 className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
                       <span>14 days free, no credit card</span>
@@ -943,15 +945,17 @@ export default function BidPerfectHome() {
                       <span>Cancel anytime, no questions</span>
                     </li>
                   </ul>
-                  <Link href="/sign-up" className="block w-full">
-                    <Button size="lg" className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all text-base font-semibold">
-                      <Rocket className="mr-2 h-5 w-5" />
-                      Start Free Trial
-                    </Button>
-                  </Link>
-                  <p className="text-xs text-slate-500 text-center mt-3">
-                    Setup takes less than 5 minutes
-                  </p>
+                  <div className="mt-auto">
+                    <Link href="/sign-up" className="block w-full">
+                      <Button size="lg" className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all text-base font-semibold">
+                        <Rocket className="mr-2 h-5 w-5" />
+                        Start Free Trial
+                      </Button>
+                    </Link>
+                    <p className="text-xs text-slate-500 text-center mt-3">
+                      Setup takes less than 5 minutes
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
