@@ -6,7 +6,8 @@ import {
   CheckCircle2, ArrowRight, Building2, FileText, Users, Shield, BarChart3, Sparkles, Network,
   Rocket, Timer, ListChecks, Lock, DollarSign, PlugZap, GaugeCircle, Package, BookOpen,
   FileSignature, Calculator, MessageSquare, GitPullRequest, Mail, Folder, Cloud, Target,
-  Zap, UserCheck, TrendingUp
+  Zap, UserCheck, TrendingUp, Crown, UserCircle, BarChart4, Key, Database, FileCheck2,
+  Quote, Briefcase
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -354,39 +355,87 @@ export default function BidPerfectHome() {
             <p className="mt-3 text-slate-600">Whether you’re a growing contractor or an enterprise capture team, BidPerfect adapts to how you work.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 mt-10">
-            <Card className="bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40">
-              <CardHeader>
-                <CardTitle>Prime Contractors</CardTitle>
-                <CardDescription>Orchestrate pursuits, coordinate subs, and submit airtight proposals—fast.</CardDescription>
-              </CardHeader>
-              <CardContent className="text-sm text-slate-600 space-y-2">
-                <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5"/> Gap analysis & compliance matrix</div>
-                <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5"/> Pricing models with CLIN mapping</div>
-                <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5"/> Proposal generator with reviewer redlines</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40">
-              <CardHeader>
-                <CardTitle>Subcontractors</CardTitle>
-                <CardDescription>Simple invites, certificate intake, and scope confirmation—no chaos.</CardDescription>
-              </CardHeader>
-              <CardContent className="text-sm text-slate-600 space-y-2">
-                <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5"/> Portal for certs, pricing, and timelines</div>
-                <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5"/> Readiness scoring and reminders</div>
-                <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5"/> Scope & deliverable alignment</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40">
-              <CardHeader>
-                <CardTitle>Executives & Capture</CardTitle>
-                <CardDescription>See the pipeline, forecast revenue, and enforce best practices.</CardDescription>
-              </CardHeader>
-              <CardContent className="text-sm text-slate-600 space-y-2">
-                <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5"/> Portfolio views & status dashboards</div>
-                <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5"/> Cost & margin insights with guardrails</div>
-                <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5"/> Audit trails and policy controls</div>
-              </CardContent>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -4 }}
+            >
+              <Card className="bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40 hover:shadow-xl transition-all h-full">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg"
+                    >
+                      <Crown className="h-5 w-5" />
+                    </motion.div>
+                    <CardTitle>Prime Contractors</CardTitle>
+                  </div>
+                  <CardDescription>Orchestrate pursuits, coordinate subs, and submit airtight proposals—fast.</CardDescription>
+                </CardHeader>
+                <CardContent className="text-sm text-slate-600 space-y-2">
+                  <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5 text-blue-600"/> Gap analysis & compliance matrix</div>
+                  <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5 text-blue-600"/> Pricing models with CLIN mapping</div>
+                  <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5 text-blue-600"/> Proposal generator with reviewer redlines</div>
+                </CardContent>
+              </Card>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -4 }}
+            >
+              <Card className="bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40 hover:shadow-xl transition-all h-full">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="p-2.5 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg"
+                    >
+                      <UserCircle className="h-5 w-5" />
+                    </motion.div>
+                    <CardTitle>Subcontractors</CardTitle>
+                  </div>
+                  <CardDescription>Simple invites, certificate intake, and scope confirmation—no chaos.</CardDescription>
+                </CardHeader>
+                <CardContent className="text-sm text-slate-600 space-y-2">
+                  <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5 text-emerald-600"/> Portal for certs, pricing, and timelines</div>
+                  <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5 text-emerald-600"/> Readiness scoring and reminders</div>
+                  <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5 text-emerald-600"/> Scope & deliverable alignment</div>
+                </CardContent>
+              </Card>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -4 }}
+            >
+              <Card className="bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40 hover:shadow-xl transition-all h-full">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="p-2.5 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 text-white shadow-lg"
+                    >
+                      <BarChart4 className="h-5 w-5" />
+                    </motion.div>
+                    <CardTitle>Executives & Capture</CardTitle>
+                  </div>
+                  <CardDescription>See the pipeline, forecast revenue, and enforce best practices.</CardDescription>
+                </CardHeader>
+                <CardContent className="text-sm text-slate-600 space-y-2">
+                  <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5 text-purple-600"/> Portfolio views & status dashboards</div>
+                  <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5 text-purple-600"/> Cost & margin insights with guardrails</div>
+                  <div className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 mt-0.5 text-purple-600"/> Audit trails and policy controls</div>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -405,18 +454,58 @@ export default function BidPerfectHome() {
           </div>
           <div>
             <div className="grid gap-4">
-              <Card className="border border-white/40 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 shadow-md">
-                <CardContent className="p-6">
-                  <div className="text-slate-700">“Gap to submission in 9 days—without sacrificing compliance. BidPerfect replaced six tools for us.”</div>
-                  <div className="mt-3 text-sm text-slate-500">Director of Capture, Regional Contractor</div>
-                </CardContent>
-              </Card>
-              <Card className="border border-white/40 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 shadow-md">
-                <CardContent className="p-6">
-                  <div className="text-slate-700">“The subcontractor portal finally gave us real visibility into readiness and pricing.”</div>
-                  <div className="mt-3 text-sm text-slate-500">VP Operations, Construction Services</div>
-                </CardContent>
-              </Card>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                viewport={{ once: true }}
+              >
+                <Card className="border border-white/40 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 shadow-md hover:shadow-lg transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="flex gap-2">
+                      <Quote className="h-8 w-8 text-blue-500 flex-shrink-0" />
+                      <div>
+                        <div className="text-slate-700 italic">"Gap to submission in 9 days—without sacrificing compliance. BidPerfect replaced six tools for us."</div>
+                        <div className="mt-4 flex items-center gap-2">
+                          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold">
+                            DC
+                          </div>
+                          <div>
+                            <div className="font-medium text-slate-900">Director of Capture</div>
+                            <div className="text-sm text-slate-500">Regional Contractor</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                viewport={{ once: true }}
+              >
+                <Card className="border border-white/40 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 shadow-md hover:shadow-lg transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="flex gap-2">
+                      <Quote className="h-8 w-8 text-emerald-500 flex-shrink-0" />
+                      <div>
+                        <div className="text-slate-700 italic">"The subcontractor portal finally gave us real visibility into readiness and pricing."</div>
+                        <div className="mt-4 flex items-center gap-2">
+                          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-semibold">
+                            VO
+                          </div>
+                          <div>
+                            <div className="font-medium text-slate-900">VP Operations</div>
+                            <div className="text-sm text-slate-500">Construction Services</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -431,24 +520,72 @@ export default function BidPerfectHome() {
             <p className="mt-3 text-slate-600">SSO (SAML), role‑based access, encryption in transit and at rest, and comprehensive audit trails. Built for regulated workflows.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 mt-10">
-            <Card className="bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40">
-              <CardHeader>
-                <CardTitle>Access & Identity</CardTitle>
-                <CardDescription>SSO/SAML, SCIM provisioning, role & project scopes.</CardDescription>
-              </CardHeader>
-            </Card>
-            <Card className="bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40">
-              <CardHeader>
-                <CardTitle>Data Protection</CardTitle>
-                <CardDescription>Encryption at rest & in transit, granular retention controls.</CardDescription>
-              </CardHeader>
-            </Card>
-            <Card className="bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40">
-              <CardHeader>
-                <CardTitle>Auditability</CardTitle>
-                <CardDescription>Immutable logs for submissions, edits, and approvals.</CardDescription>
-              </CardHeader>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -4 }}
+            >
+              <Card className="bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40 hover:shadow-lg transition-all h-full">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg"
+                    >
+                      <Key className="h-5 w-5" />
+                    </motion.div>
+                    <CardTitle>Access & Identity</CardTitle>
+                  </div>
+                  <CardDescription>SSO/SAML, SCIM provisioning, role & project scopes.</CardDescription>
+                </CardHeader>
+              </Card>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -4 }}
+            >
+              <Card className="bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40 hover:shadow-lg transition-all h-full">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="p-2.5 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg"
+                    >
+                      <Database className="h-5 w-5" />
+                    </motion.div>
+                    <CardTitle>Data Protection</CardTitle>
+                  </div>
+                  <CardDescription>Encryption at rest & in transit, granular retention controls.</CardDescription>
+                </CardHeader>
+              </Card>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -4 }}
+            >
+              <Card className="bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 border border-white/40 hover:shadow-lg transition-all h-full">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="p-2.5 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 text-white shadow-lg"
+                    >
+                      <FileCheck2 className="h-5 w-5" />
+                    </motion.div>
+                    <CardTitle>Auditability</CardTitle>
+                  </div>
+                  <CardDescription>Immutable logs for submissions, edits, and approvals.</CardDescription>
+                </CardHeader>
+              </Card>
+            </motion.div>
           </div>
 
           {/* INTEGRATIONS GRID */}
@@ -459,7 +596,12 @@ export default function BidPerfectHome() {
               <Card className="border-slate-200 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50">
                 <CardHeader>
                   <div className="flex items-center gap-2 text-slate-700">
-                    <div className="p-2 rounded-lg bg-slate-50 border"><Folder className="h-5 w-5"/></div>
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md"
+                    >
+                      <Folder className="h-5 w-5"/>
+                    </motion.div>
                     <CardTitle data-testid="integration-title">Drive & Docs</CardTitle>
                   </div>
                   <CardDescription>Google Drive • OneDrive • SharePoint</CardDescription>
@@ -474,7 +616,12 @@ export default function BidPerfectHome() {
               <Card className="border-slate-200 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50">
                 <CardHeader>
                   <div className="flex items-center gap-2 text-slate-700">
-                    <div className="p-2 rounded-lg bg-slate-50 border"><Mail className="h-5 w-5"/></div>
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="p-2 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 text-white shadow-md"
+                    >
+                      <Mail className="h-5 w-5"/>
+                    </motion.div>
                     <CardTitle data-testid="integration-title">Email</CardTitle>
                   </div>
                   <CardDescription>Gmail • Microsoft 365</CardDescription>
@@ -489,7 +636,12 @@ export default function BidPerfectHome() {
               <Card className="border-slate-200 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50">
                 <CardHeader>
                   <div className="flex items-center gap-2 text-slate-700">
-                    <div className="p-2 rounded-lg bg-slate-50 border"><FileSignature className="h-5 w-5"/></div>
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="p-2 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-md"
+                    >
+                      <FileSignature className="h-5 w-5"/>
+                    </motion.div>
                     <CardTitle data-testid="integration-title">e‑Sign</CardTitle>
                   </div>
                   <CardDescription>DocuSign • Adobe Acrobat Sign</CardDescription>
@@ -504,7 +656,12 @@ export default function BidPerfectHome() {
               <Card className="border-slate-200 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50">
                 <CardHeader>
                   <div className="flex items-center gap-2 text-slate-700">
-                    <div className="p-2 rounded-lg bg-slate-50 border"><DollarSign className="h-5 w-5"/></div>
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="p-2 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 text-white shadow-md"
+                    >
+                      <DollarSign className="h-5 w-5"/>
+                    </motion.div>
                     <CardTitle data-testid="integration-title">Accounting</CardTitle>
                   </div>
                   <CardDescription>QuickBooks Online</CardDescription>
@@ -519,7 +676,12 @@ export default function BidPerfectHome() {
               <Card className="border-slate-200 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50">
                 <CardHeader>
                   <div className="flex items-center gap-2 text-slate-700">
-                    <div className="p-2 rounded-lg bg-slate-50 border"><Cloud className="h-5 w-5"/></div>
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-md"
+                    >
+                      <Cloud className="h-5 w-5"/>
+                    </motion.div>
                     <CardTitle data-testid="integration-title">Storage</CardTitle>
                   </div>
                   <CardDescription>AWS S3 • Azure Blob</CardDescription>
@@ -534,7 +696,12 @@ export default function BidPerfectHome() {
               <Card className="border-slate-200 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50">
                 <CardHeader>
                   <div className="flex items-center gap-2 text-slate-700">
-                    <div className="p-2 rounded-lg bg-slate-50 border"><Lock className="h-5 w-5"/></div>
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className="p-2 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-md"
+                    >
+                      <Lock className="h-5 w-5"/>
+                    </motion.div>
                     <CardTitle data-testid="integration-title">Identity</CardTitle>
                   </div>
                   <CardDescription>Clerk SSO • SCIM (provisioning)</CardDescription>
