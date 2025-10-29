@@ -275,7 +275,7 @@ export default function BidPerfectHome() {
                 </Button>
               </a>
             </div>
-            <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 items-center">
+            <div className="mt-10 flex flex-wrap justify-center gap-3">
               {badges.map((badge, idx) => (
                 <motion.div
                   key={badge.text}
@@ -285,7 +285,7 @@ export default function BidPerfectHome() {
                   whileHover={{ y: -2, scale: 1.02 }}
                   className="group"
                 >
-                  <div className="h-14 rounded-xl border border-white/40 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all flex items-center gap-2 px-3 relative overflow-hidden">
+                  <div className="h-12 rounded-xl border border-white/40 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all flex items-center gap-2 px-3 py-2 relative overflow-hidden whitespace-nowrap">
                     {/* Gradient background on hover */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${badge.gradient} opacity-0 group-hover:opacity-10 transition-opacity`} />
                     
@@ -295,7 +295,7 @@ export default function BidPerfectHome() {
                     </div>
                     
                     {/* Text */}
-                    <span className="relative text-xs font-semibold text-slate-700 leading-tight">
+                    <span className="relative text-[11px] font-semibold text-slate-700 leading-tight">
                       {badge.text}
                     </span>
                   </div>
