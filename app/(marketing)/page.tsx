@@ -7,7 +7,7 @@ import {
   Rocket, Timer, ListChecks, Lock, DollarSign, PlugZap, GaugeCircle, Package, BookOpen,
   FileSignature, Calculator, MessageSquare, GitPullRequest, Mail, Folder, Cloud, Target,
   Zap, UserCheck, TrendingUp, Crown, UserCircle, BarChart4, Key, Database, FileCheck2,
-  Quote, Briefcase
+  Quote, Briefcase, Calendar, Video, Phone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -117,30 +117,81 @@ function ROIBlock(){
   const [bids, setBids] = useState(12);
 
   const savings = useMemo(() => hourly * hours * bids * 0.35, [hourly, hours, bids]);
+  const annualSavings = useMemo(() => savings * 4, [savings]);
+  
   return (
     <Card className="border-0 shadow-xl bg-gradient-to-br from-white/70 via-indigo-50/60 to-fuchsia-50/50 backdrop-blur-xl supports-[backdrop-filter]:bg-white/50">
       <CardHeader>
-        <CardTitle>Quick ROI Estimator</CardTitle>
-        <CardDescription>Estimate time-savings with automation (assumes 35% efficiency gain).</CardDescription>
-      </CardHeader>
-      <CardContent className="grid md:grid-cols-4 gap-4">
-        <div>
-          <Label>Avg. Hourly Cost ($)</Label>
-          <Input type="number" value={hourly} onChange={(e)=>setHourly(Number(e.target.value)||0)} />
-        </div>
-        <div>
-          <Label>Hours per Bid</Label>
-          <Input type="number" value={hours} onChange={(e)=>setHours(Number(e.target.value)||0)} />
-        </div>
-        <div>
-          <Label>Bids / Quarter</Label>
-          <Input type="number" value={bids} onChange={(e)=>setBids(Number(e.target.value)||0)} />
-        </div>
-        <div className="flex items-end">
-          <div className="w-full p-4 rounded-xl border border-white/40 bg-gradient-to-br from-white/60 to-indigo-50/40 backdrop-blur-xl supports-[backdrop-filter]:bg-white/50">
-            <div className="text-xs text-muted-foreground">Projected Savings</div>
-            <div className="text-2xl font-semibold">${savings.toLocaleString()}</div>
+        <div className="flex items-center gap-2">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md"
+          >
+            <Calculator className="h-5 w-5" />
+          </motion.div>
+          <div>
+            <CardTitle>Quick ROI Estimator</CardTitle>
+            <CardDescription>Calculate your time savings (35% efficiency gain)</CardDescription>
           </div>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="grid md:grid-cols-3 gap-4">
+          <div className="space-y-2">
+            <Label className="text-sm font-medium flex items-center gap-2">
+              <DollarSign className="h-4 w-4 text-blue-600" />
+              Avg. Hourly Cost
+            </Label>
+            <Input 
+              type="number" 
+              value={hourly} 
+              onChange={(e)=>setHourly(Number(e.target.value)||0)}
+              className="h-11 text-base"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium flex items-center gap-2">
+              <Timer className="h-4 w-4 text-purple-600" />
+              Hours per Bid
+            </Label>
+            <Input 
+              type="number" 
+              value={hours} 
+              onChange={(e)=>setHours(Number(e.target.value)||0)}
+              className="h-11 text-base"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium flex items-center gap-2">
+              <Target className="h-4 w-4 text-emerald-600" />
+              Bids / Quarter
+            </Label>
+            <Input 
+              type="number" 
+              value={bids} 
+              onChange={(e)=>setBids(Number(e.target.value)||0)}
+              className="h-11 text-base"
+            />
+          </div>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-4 pt-4 border-t border-slate-200">
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            className="p-5 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg"
+          >
+            <div className="text-sm font-medium opacity-90">Quarterly Savings</div>
+            <div className="text-3xl font-bold mt-1">${savings.toLocaleString()}</div>
+            <div className="text-xs opacity-75 mt-1">{bids} bids × {hours}h × ${hourly}/h × 35%</div>
+          </motion.div>
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            className="p-5 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg"
+          >
+            <div className="text-sm font-medium opacity-90">Annual Savings</div>
+            <div className="text-3xl font-bold mt-1">${annualSavings.toLocaleString()}</div>
+            <div className="text-xs opacity-75 mt-1">Based on 4 quarters per year</div>
+          </motion.div>
         </div>
       </CardContent>
     </Card>
@@ -728,17 +779,52 @@ export default function BidPerfectHome() {
           </div>
           <div className="mt-10 grid md:grid-cols-2 gap-6">
             {[
-              "Does BidPerfect replace my proposal team?",
-              "Can we invite subcontractors securely?",
-              "How do you handle wage determinations & CLINs?",
-              "Do you support post‑award management?",
-              "Is our data isolated?",
-              "What’s the rollout time?",
-            ].map((q) => (
-              <Card key={q} className="border-slate-200 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50" data-testid="faq-card">
-                <CardHeader><CardTitle>{q}</CardTitle></CardHeader>
-                <CardContent className="text-slate-600 text-sm">Details available on request.</CardContent>
-              </Card>
+              {
+                q: "Does BidPerfect replace my proposal team?",
+                a: "No—BidPerfect amplifies your team. It automates parsing, drafting, and compliance checks so your experts focus on strategy, technical depth, and win themes. Think of it as adding a 24/7 analyst to every pursuit."
+              },
+              {
+                q: "Can we invite subcontractors securely?",
+                a: "Absolutely. Our subcontractor portal uses role-based access, secure document vaults, and encrypted communication. Subs only see what's relevant to their scope, and you control approval workflows and data retention."
+              },
+              {
+                q: "How do you handle wage determinations & CLINs?",
+                a: "BidPerfect integrates wage determination databases (DOL/SAM) and maps them directly to CLINs. You can model labor categories, overhead, and fee scenarios with margin intelligence—then export to Excel or PDF for review."
+              },
+              {
+                q: "Do you support post‑award management?",
+                a: "Yes. Track mods, deliverables, GFP logs, and invoice generation post-award. We also provide CPARS prep tools and closeout checklists, so you manage the entire contract lifecycle in one platform."
+              },
+              {
+                q: "Is our data isolated?",
+                a: "Your data is tenant-isolated with encryption at rest (AES-256) and in transit (TLS 1.3). We support regional data residency, custom retention policies, and provide immutable audit logs for compliance and governance."
+              },
+              {
+                q: "What's the rollout time?",
+                a: "Most teams are live in 1-2 weeks. We handle SSO config, data migration, and training. You'll have a dedicated onboarding specialist, custom templates, and ongoing support to ensure a smooth transition."
+              },
+            ].map((faq, idx) => (
+              <motion.div
+                key={faq.q}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="border-slate-200 bg-white/60 backdrop-blur-md supports-[backdrop-filter]:bg-white/50 hover:shadow-lg transition-shadow h-full" data-testid="faq-card">
+                  <CardHeader>
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md flex-shrink-0">
+                        <MessageSquare className="h-4 w-4" />
+                      </div>
+                      <CardTitle className="text-lg">{faq.q}</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="text-slate-600 text-sm leading-relaxed">
+                    {faq.a}
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -749,43 +835,148 @@ export default function BidPerfectHome() {
         {/* Decorative background */}
         <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,transparent,black)]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-10 items-center">
-            <div className="md:col-span-2">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
               <h3 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
                 Ready to win more bids with less chaos?
               </h3>
-              <p className="mt-4 text-xl text-blue-100 max-w-2xl leading-relaxed">
+              <p className="mt-4 text-xl text-blue-100 leading-relaxed">
                 See how BidPerfect streamlines your entire pursuit—from the first read to award and beyond.
               </p>
-              <div className="mt-6 flex flex-wrap gap-2 text-sm">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-blue-200" />
-                  <span className="text-blue-100">Free 14-day trial</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-blue-200" />
-                  <span className="text-blue-100">No credit card required</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-blue-200" />
-                  <span className="text-blue-100">Cancel anytime</span>
-                </div>
-              </div>
-            </div>
-            <div className="md:justify-self-end flex flex-col sm:flex-row md:flex-col gap-4 w-full md:w-auto">
-              <Link href="/sign-up" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto bg-white text-blue-600 hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all text-base font-semibold px-8">
-                  Start Free Trial
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="/sign-in" className="w-full sm:w-auto">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border-2 border-white/40 text-white hover:bg-white/10 hover:border-white/60 transition-all text-base px-8">
-                  Sign In
-                </Button>
-              </Link>
-            </div>
+            </motion.div>
           </div>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {/* Book a Demo Card */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <Card className="bg-white text-slate-900 border-0 shadow-2xl hover:shadow-3xl transition-all h-full">
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg">
+                      <Calendar className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-2xl font-bold">Book a Demo</h4>
+                      <p className="text-sm text-slate-600">For teams & enterprises</p>
+                    </div>
+                  </div>
+                  <p className="text-slate-600 mb-6 leading-relaxed">
+                    Get a personalized walkthrough with our team. We'll show you how BidPerfect fits your workflow and answer technical questions.
+                  </p>
+                  <ul className="space-y-3 mb-6">
+                    <li className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>30-minute guided demo</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>Custom ROI analysis for your team</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>SSO & integration planning</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>Volume pricing discussion</span>
+                    </li>
+                  </ul>
+                  <a href="https://calendly.com/bidperfect/demo" target="_blank" rel="noopener noreferrer" className="block w-full">
+                    <Button size="lg" className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all text-base font-semibold">
+                      <Calendar className="mr-2 h-5 w-5" />
+                      Schedule Demo
+                    </Button>
+                  </a>
+                  <p className="text-xs text-slate-500 text-center mt-3">
+                    Available Mon-Fri, 9 AM - 6 PM ET
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Start Free Trial Card */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <Card className="bg-white text-slate-900 border-0 shadow-2xl hover:shadow-3xl transition-all h-full">
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg">
+                      <Rocket className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-2xl font-bold">Start Free Trial</h4>
+                      <p className="text-sm text-slate-600">Get started instantly</p>
+                    </div>
+                  </div>
+                  <p className="text-slate-600 mb-6 leading-relaxed">
+                    Jump in and explore BidPerfect yourself. Full access to all features, no commitment required.
+                  </p>
+                  <ul className="space-y-3 mb-6">
+                    <li className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                      <span>14 days free, no credit card</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                      <span>Full platform access</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                      <span>Sample RFP templates included</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                      <span>Cancel anytime, no questions</span>
+                    </li>
+                  </ul>
+                  <Link href="/sign-up" className="block w-full">
+                    <Button size="lg" className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all text-base font-semibold">
+                      <Rocket className="mr-2 h-5 w-5" />
+                      Start Free Trial
+                    </Button>
+                  </Link>
+                  <p className="text-xs text-slate-500 text-center mt-3">
+                    Setup takes less than 5 minutes
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+
+          {/* Contact Options */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="mt-12 text-center"
+          >
+            <p className="text-blue-100 text-sm mb-4">Prefer to talk first?</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a href="mailto:sales@bidperfect.ai" className="flex items-center gap-2 text-white hover:text-blue-100 transition-colors">
+                <Mail className="h-4 w-4" />
+                <span className="text-sm font-medium">sales@bidperfect.ai</span>
+              </a>
+              <a href="tel:+15551234567" className="flex items-center gap-2 text-white hover:text-blue-100 transition-colors">
+                <Phone className="h-4 w-4" />
+                <span className="text-sm font-medium">(555) 123-4567</span>
+              </a>
+            </div>
+          </motion.div>
         </div>
       </section>
 
